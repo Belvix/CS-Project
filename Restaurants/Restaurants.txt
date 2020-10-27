@@ -1,1 +1,1 @@
-{'index':'1','name':'McDonald's,'type':'Fast Food','desc':'Fast food join that specialises in burgers'}
+{"index":"1","name":"McDonald's","type":"Fast Food","desc":"Fast food join that specialises in burgers","food":"Burger","menu":"Restaurants/Restaurant Menus/McDonald.txt"}
