@@ -12,12 +12,12 @@ def customer():
     global restart
     global cart
     menu_reshow = True
-    print("Welcome customer. Please take a look at the list of restaurants to choose from:-")
+    print("----==Restaurant Select Menu==----")
     restaurant_list = [line.rstrip('\n') for line in restaurants]
     restaurant_dict_list = [json.loads(restaurant) for restaurant in restaurant_list]
     while not restart:
         menu_reshow = True
-        print("Choose a restaurant number to show menu, type logout to exit, cart to show cart")
+        print("Choose a restaurant number to show menu, type logout to exit, cart to show cart:- ")
         for restaurant in restaurant_dict_list:
             print(restaurant['index']+':-'+restaurant['name'])
         command = input()
@@ -29,33 +29,64 @@ def customer():
                     menu_string=menu.readline()
                     menu_dict = json.loads(menu_string)
                     while menu_reshow:
-                        print("Enter a food item to add")
+                        print("Enter a food item to add:- ")
                         for items in menu_dict:
                             print(items['index']+':- '+items['item'])
                         menu_choice = input()
+                        for items in menu_dict:
+                            if menu_choice==items['index']:
+                                cart.append(items['item'])
                         if menu_choice == 'back':
                             menu_reshow = False
-        if command == 'logout':
-            restart = True
+                        elif menu_choice == 'cart':
+                            c=1
+                            if len(cart)!=0:
+                                print("Your cart contains:")
+                                for i in cart:
+                                    print(str(c)+':'+i)
+                                    c+=1
+                                cont = input("Continue?\ny to add more, n to select another restaurant\n")
+                                if cont == 'y':
+                                    continue
+                                if cont == 'n':
+                                    break
+                            else:
+                                print("Empty Cart")
+                        else:
+                            print("Select a different index")
                        
-        elif command == 'back':
-            customer()
-        elif command == 'cart':
-            print(cart)
+            elif command == 'logout':
+                restart = True
+            elif command == 'cart':
+                c=1
+                if len(cart)!=0:
+                    print("Your cart contains:")
+                    for i in cart:
+                        print(str(c)+':'+i)
+                        c+=1
+                    cont = input("Continue? y/n")
+                    if cont == 'y':
+                        continue
+                    if cont == 'n':
+                        break
+                else:
+                    print("Empty Cart")
+            else:
+                print("Select a different index")
     
 while True:
-    print(restart)
     restaurantlist = open("Restaurants/Restaurants.txt", 'r+')
     restaurants = restaurantlist.readlines()
     #customer = False
     #manager = False
-    start=input("Type C to order food, type M is you're a manager, exit to close")
+    start=input("Type C to order food, type M is you're a manager, exit to close:- ")
     if restart == True:
         restart = False
         
     if start=='c' or start=='C' or start=='customer' or start=='Customer':
         #customer = True
         #manager = False
+        print("Welcome Customer")
         customer()
         
     elif start=='m' or start=='M' or start=='manager' or start=='Manager':
