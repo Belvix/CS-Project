@@ -79,17 +79,17 @@ while True:
     restaurants = restaurantlist.readlines()
     #customer = False
     #manager = False
-    start=input("Type C to order food, type M is you're a manager, exit to close:- ")
+    start=input("Enter 'Order' to order food, type 'Manage' is you're a manager, 'exit' to close:- ")
     if restart == True:
         restart = False
         
-    if start=='c' or start=='C' or start=='customer' or start=='Customer':
+    if start=='o' or start=='O' or start=='order' or start=='Order':
         #customer = True
         #manager = False
         print("Welcome Customer")
         customer()
         
-    elif start=='m' or start=='M' or start=='manager' or start=='Manager':
+    elif start=='m' or start=='M' or start=='manage' or start=='Manage':
         print("Welcome Manager")
         #manager = True
         #customer = False
