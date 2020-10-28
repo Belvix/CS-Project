@@ -4,33 +4,100 @@
 
 import json
 
-customer = False
-manager = False
+restart = False
+cart = []
 
+def customer():
+    global restaurants
+    global restart
+    global cart
+    menu_reshow = True
+    print("----==Restaurant Select Menu==----")
+    restaurant_list = [line.rstrip('\n') for line in restaurants]
+    restaurant_dict_list = [json.loads(restaurant) for restaurant in restaurant_list]
+    while not restart:
+        menu_reshow = True
+        print("Choose a restaurant number to show menu, type logout to exit, cart to show cart:- ")
+        for restaurant in restaurant_dict_list:
+            print(restaurant['index']+':-'+restaurant['name'])
+        command = input()
+
+        #elif command in [rest['index'] for rest in restaurant_dict_list]:
+        for restaurant in restaurant_dict_list:
+            if command == restaurant['index']:
+                with open(restaurant['menu'],'r') as menu:
+                    menu_string=menu.readline()
+                    menu_dict = json.loads(menu_string)
+                    while menu_reshow:
+                        print("Enter a food item to add:- ")
+                        for items in menu_dict:
+                            print(items['index']+':- '+items['item'])
+                        menu_choice = input()
+                        for items in menu_dict:
+                            if menu_choice==items['index']:
+                                cart.append(items['item'])
+                        if menu_choice == 'back':
+                            menu_reshow = False
+                        elif menu_choice == 'cart':
+                            c=1
+                            if len(cart)!=0:
+                                print("Your cart contains:")
+                                for i in cart:
+                                    print(str(c)+':'+i)
+                                    c+=1
+                                cont = input("Continue?\ny to add more, n to select another restaurant\n")
+                                if cont == 'y':
+                                    continue
+                                if cont == 'n':
+                                    break
+                            else:
+                                print("Empty Cart")
+                        else:
+                            print("Select a different index")
+                       
+            elif command == 'logout':
+                restart = True
+            elif command == 'cart':
+                c=1
+                if len(cart)!=0:
+                    print("Your cart contains:")
+                    for i in cart:
+                        print(str(c)+':'+i)
+                        c+=1
+                    cont = input("Continue? y/n")
+                    if cont == 'y':
+                        continue
+                    if cont == 'n':
+                        break
+                else:
+                    print("Empty Cart")
+            else:
+                print("Select a different index")
+    
 while True:
-    print(customer)
-    start=input("Are you a customer or a mangager? Type c for customer and m for manager")
     restaurantlist = open("Restaurants/Restaurants.txt", 'r+')
-    if start=='c' or 'C' or 'customer' or 'Customer' and customer ==False and manager==False:
-        customer = True
-        manager = False
-        print("Welcome customer. Please take a look at the list of restaurants to choose from:-")
-        for restaurant in restaurantlist:
-            print(restaurant)
-            #restaurant = json.loads(restaurant)
-            #print(restaurant['index']+':-'+restaurant['name'])
+    restaurants = restaurantlist.readlines()
+    #customer = False
+    #manager = False
+    start=input("Type C to order food, type M is you're a manager, exit to close:- ")
+    if restart == True:
+        restart = False
         
-    if start=='m' or 'M' or 'manager' or 'Manager' and customer ==False and manager==False:
-        manager = True
-        customer = False
-    if start=='exit':
+    if start=='c' or start=='C' or start=='customer' or start=='Customer':
+        #customer = True
+        #manager = False
+        print("Welcome Customer")
+        customer()
+        
+    elif start=='m' or start=='M' or start=='manager' or start=='Manager':
+        print("Welcome Manager")
+        #manager = True
+        #customer = False
+
+    elif start=='exit':
         print("exiting")
         restaurantlist.close()
         break
-    if customer==True:
-        print("Welcome customer. Please take a look at the list of restaurants to choose from:-")
-        for restaurant in restaurantlist:
-            print(restaurant)
-            #restaurant = json.loads(restaurant)
-            #print(restaurant['index']+':-'+restaurant['name'])
+    
+
         
