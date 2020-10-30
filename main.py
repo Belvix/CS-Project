@@ -3,6 +3,7 @@
 #Project topic - Food ordering app
 
 import json
+import manage
 
 restart = False
 cart = []
@@ -91,6 +92,7 @@ while True:
         
     elif start=='m' or start=='M' or start=='manage' or start=='Manage':
         print("Welcome Manager")
+        manage.manage()
         #manager = True
         #customer = False
 
