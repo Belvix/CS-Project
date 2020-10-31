@@ -92,7 +92,7 @@ while True:
         
     elif start=='m' or start=='M' or start=='manage' or start=='Manage':
         print("Welcome Manager")
-        manage.manage()
+        manage.manage(restaurants)
         #manager = True
         #customer = False
 
