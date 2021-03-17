@@ -3,8 +3,7 @@
 #Project topic - Food ordering app
 
 import json
-import manage
-import os
+import sys
 
 restart = False
 cart=[]
@@ -57,7 +56,7 @@ def customer():
                     menu_dict = json.loads(menu_string)     #string to list of dictionaries
                     menu.close()
                     while menu_reshow:
-                        print("Enter a food item to add or type cart to see cart:- ")
+                        print("Enter a food item to add, back to go back to restaurant list or type cart to see cart:- ")
                         for items in menu_dict:
                             print(items['index']+':- '+items['item'])
                         menu_choice = input()
@@ -77,10 +76,9 @@ def customer():
                                 wobj=open("receipt.txt",'w')
                                 for i in range(len(cart_items)):
                                     s = str(i+1)+":-"+cart_items[i][0]+" x"+str(cart_items[i][1])+'\n'
-                                    print("Done")
                                     wobj.write(s)
                                 wobj.close()
-                                os.quit()
+                                sys.exit()
                     else:
                             print("Select a different index")
                        
@@ -99,7 +97,8 @@ def customer():
                         s = str(i+1)+":-"+cart_items[i][0]+" x"+str(cart_items[i][1])+'\n'
                         wobj.write(s)
                     wobj.close()
-                    os.exit()
+                    print("Thanks for using the program")
+                    sys.exit()
             else:
                 print("Select a different index")
                 continue
@@ -107,24 +106,14 @@ def customer():
 while True:
     restaurantlist = open("Restaurants/Restaurants.txt", 'r+')
     restaurants = restaurantlist.readlines()
-    #customer = False
-    #manager = False
-    start=input("Enter 'Order' to order food, type 'Manage' is you're a manager, 'exit' to close:- ")
+    start=input("Enter 'Order' to order food, 'exit' to close:- ")
     if restart == True:
         restart = False
         
     if start=='o' or start=='O' or start=='order' or start=='Order':
-        #customer = True
-        #manager = False
         print("Welcome Customer")
         customer()
         
-    elif start=='m' or start=='M' or start=='manage' or start=='Manage':
-        print("Welcome Manager")
-        manage.manage(restaurants)
-        #manager = True
-        #customer = False
-
     elif start=='exit':
         print("exiting")
         restaurantlist.close()
