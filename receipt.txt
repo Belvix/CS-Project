@@ -1,0 +1,4 @@
+1:-Veg Pizza x8
+2:-Nonveg Pizza x6
+3:-Soda x6
+4:-Burger x3

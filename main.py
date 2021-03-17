@@ -4,9 +4,36 @@
 
 import json
 import manage
+import os
 
 restart = False
-cart = []
+cart=[]
+cart_items = []
+
+def cart_display(items):
+    if len(cart)!=0:
+        print("Your cart contains:")
+        while True:
+            done=[]
+            for i in cart:
+                if i not in done:
+                    done.append(i)
+                    c=0
+                    for j in cart:
+                        if j==i:
+                            c+=1
+                    items.append([i,c])
+            else:
+                    break
+    else:
+        print("Empty cart")
+        return 0
+    c = 1
+    for i in items:
+        print(str(c),":-",i[0],'x'+str(i[1]))
+        c+=1
+
+    
 
 def customer():
     global restaurants
@@ -19,18 +46,18 @@ def customer():
     while not restart:
         menu_reshow = True
         print("Choose a restaurant number to show menu, type logout to exit, cart to show cart:- ")
-        for restaurant in restaurant_dict_list:
-            print(restaurant['index']+':-'+restaurant['name'])
+        for r in restaurant_dict_list:
+                print(r['index']+':-'+r['name'])
         command = input()
-
-        #elif command in [rest['index'] for rest in restaurant_dict_list]:
         for restaurant in restaurant_dict_list:
+
             if command == restaurant['index']:
                 with open(restaurant['menu'],'r') as menu:
-                    menu_string=menu.readline()
-                    menu_dict = json.loads(menu_string)
+                    menu_string=menu.readline()         #string form of menu
+                    menu_dict = json.loads(menu_string)     #string to list of dictionaries
+                    menu.close()
                     while menu_reshow:
-                        print("Enter a food item to add:- ")
+                        print("Enter a food item to add or type cart to see cart:- ")
                         for items in menu_dict:
                             print(items['index']+':- '+items['item'])
                         menu_choice = input()
@@ -40,40 +67,42 @@ def customer():
                         if menu_choice == 'back':
                             menu_reshow = False
                         elif menu_choice == 'cart':
-                            c=1
-                            if len(cart)!=0:
-                                print("Your cart contains:")
-                                for i in cart:
-                                    print(str(c)+':'+i)
-                                    c+=1
-                                cont = input("Continue?\ny to add more, n to select another restaurant\n")
-                                if cont == 'y':
-                                    continue
-                                if cont == 'n':
-                                    break
-                            else:
-                                print("Empty Cart")
-                        else:
+                            cart_display(cart_items)
+                            cont = input("Continue?\ny to add more, n to select another restaurant, checkout to print receipt\n")
+                            if cont == 'y':
+                                continue
+                            if cont == 'n':
+                                break
+                            if cont == 'checkout' or cont=='Checkout':
+                                wobj=open("receipt.txt",'w')
+                                for i in range(len(cart_items)):
+                                    s = str(i+1)+":-"+cart_items[i][0]+" x"+str(cart_items[i][1])+'\n'
+                                    print("Done")
+                                    wobj.write(s)
+                                wobj.close()
+                                os.quit()
+                    else:
                             print("Select a different index")
                        
             elif command == 'logout':
                 restart = True
             elif command == 'cart':
-                c=1
-                if len(cart)!=0:
-                    print("Your cart contains:")
-                    for i in cart:
-                        print(str(c)+':'+i)
-                        c+=1
-                    cont = input("Continue? y/n")
-                    if cont == 'y':
-                        continue
-                    if cont == 'n':
-                        break
-                else:
-                    print("Empty Cart")
+                cart_display(cart_items)
+                cont = input("Continue?\ny to add more, n to select another restaurant, checkout to print receipt\n")
+                if cont == 'y':
+                    continue
+                if cont == 'n':
+                    break
+                if cont == 'checkout' or cont=='Checkout':
+                    wobj=open("receipt.txt",'w')
+                    for i in range(len(cart_items)):
+                        s = str(i+1)+":-"+cart_items[i][0]+" x"+str(cart_items[i][1])+'\n'
+                        wobj.write(s)
+                    wobj.close()
+                    os.exit()
             else:
                 print("Select a different index")
+                continue
     
 while True:
     restaurantlist = open("Restaurants/Restaurants.txt", 'r+')
